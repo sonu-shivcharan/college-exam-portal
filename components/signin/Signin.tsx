@@ -16,17 +16,11 @@ import { Input } from "../ui/input";
 //import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters long.",
-  }),
-  role: z.enum(["user", "admin"], {
-    message: "Please select a valid role.",
   }),
 });
 
@@ -40,18 +34,21 @@ export default function SigninForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    fetch("./api/sign-in", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
+    console.log("oefjuhfu");
+    fetch("/api/s", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify(values)
-    }).then((resp)=>resp.json()).then((data)=>{
-      console.log(data)
-    }).catch((err)=>{
-      console.error("Error while signing in ", err)
+      body: JSON.stringify({values}),
     })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error("Error while signing in ", err);
+      });
   }
 
   return (
@@ -83,27 +80,7 @@ export default function SigninForm() {
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Role</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
+
         <Button type="submit" className="mt-3">
           Sign In
         </Button>
