@@ -13,6 +13,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "../ui/input";
+import { useState, useTransition } from "react";
+import authService from "@/services/client/authService";
+
 //import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
@@ -25,6 +28,8 @@ const formSchema = z.object({
 });
 
 export default function SigninForm() {
+  const [isLoading, startTransition] = useTransition()
+  const [error, setError] = useState("")
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,26 +39,19 @@ export default function SigninForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("oefjuhfu");
-    fetch("/api/s", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({values}),
+    setError("")
+    startTransition(async()=>{
+      const response = await authService.signin(values);
+      if(response instanceof Error){
+        setError(response.message)
+      }
     })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.error("Error while signing in ", err);
-      });
   }
 
   return (
     <Form {...form}>
       <form className="max-w-80 mx-auto" onSubmit={form.handleSubmit(onSubmit)}>
+        
         <FormField
           control={form.control}
           name="email"
@@ -80,9 +78,9 @@ export default function SigninForm() {
             </FormItem>
           )}
         />
-
-        <Button type="submit" className="mt-3">
-          Sign In
+        {error && <FormMessage className="text-center">{error}</FormMessage>}
+        <Button type="submit" className="mt-3 w-full" disabled={isLoading}>
+          {isLoading?"Signing In...":"Sign In"}
         </Button>
       </form>
     </Form>
