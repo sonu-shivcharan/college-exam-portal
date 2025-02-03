@@ -1,5 +1,5 @@
 
-import SigninForm from "@/components/signin/Signin";
+import SigninForm from "../components/signin/Signin";
 
 export default function Home() {
   return (
