@@ -1,10 +1,8 @@
-import type { MetaFunction } from "@remix-run/node";
-import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import type { MetaFunction,LoaderFunctionArgs} from "@remix-run/node";
+import { Form, redirect, useLoaderData } from "@remix-run/react";
 import { User } from "@supabase/supabase-js";
-import { AppSidebar } from "~/components/app-sidebar";
-import { Button } from "~/components/ui/button";
-import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
+import LogoutBtn from "~/components/logoutBtn";
+import { SidebarTrigger } from "~/components/ui/sidebar";
 import authService from "~/utils/server/auth.services";
 export async function loader({ request }: LoaderFunctionArgs) {
   const {user, headers} = await authService.checkUserSession(request)
@@ -27,7 +25,7 @@ export default function Index() {
       <SidebarTrigger></SidebarTrigger>
       {actionData.email}
       <Form method="post" action="/logout">
-        <Button>Logout</Button>
+        <LogoutBtn></LogoutBtn>
       </Form>
     </div>
   );
