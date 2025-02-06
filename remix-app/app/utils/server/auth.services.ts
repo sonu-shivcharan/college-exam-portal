@@ -1,6 +1,6 @@
 import { getSupabase } from "./supabase.server";
 
-class AuthService {
+const authService = {
   async login(request: Request) {
     const formData = await request.formData();
     const email = formData.get("email");
@@ -19,12 +19,12 @@ class AuthService {
     }
 
     return { headers }; // Return headers to set auth cookies
-  }
+  },
   async logout(request: Request) {
     const { supabase } = getSupabase(request);
     const { error } = await supabase.auth.signOut();
     return !error;
-  }
+  },
   async checkUserSession(request: Request) {
     const { supabase, headers } = getSupabase(request);
     const {
@@ -35,5 +35,4 @@ class AuthService {
   }
 }
 
-const authService = new AuthService();
-export default authService;
+export default authService

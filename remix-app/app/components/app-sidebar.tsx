@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@remix-run/react";
+import { Form, Link, NavLink, useLocation } from "@remix-run/react";
 import { User } from "lucide-react";
 import {
   Sidebar,
@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-  SidebarInput,
   SidebarSeparator,
 } from "~/components/ui/sidebar";
 import {
@@ -17,8 +16,19 @@ import {
   DropdownMenuGroup,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
+import LogoutBtn from "./logoutBtn";
 
+
+const navLinks = [
+  {
+    pathname: "/",
+    label: "Home",
+  },
+  {
+    pathname: "/students",
+    label: "Students",
+  },
+];
 export function AppSidebar() {
   const { pathname } = useLocation();
   if (pathname === "/login") {
@@ -28,8 +38,20 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>Header</SidebarHeader>
       <SidebarContent>
-          <SidebarSeparator></SidebarSeparator>
+        <SidebarSeparator />
         <SidebarGroup>
+          {navLinks.map((link) => (
+            <NavLink
+            key={link.pathname}
+              className={({ isActive }) =>
+                `w-full p-1 px-4 rounded duration-75 ${
+                  isActive ? "bg-primary text-white" : ""
+                }`
+              }
+              to={link.pathname}>
+              {link.label}
+            </NavLink>
+          ))}
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
@@ -43,13 +65,19 @@ export function AppSidebar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-full border">
             <DropdownMenuGroup>
-              <DropdownMenuItem><Link to="/profile">Profile</Link></DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/profile">Profile</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>Billing</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Keyboard shortcut</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
+        <Form method="post" action="/logout">
+
+        <LogoutBtn/>
+        </Form>
       </SidebarFooter>
     </Sidebar>
   );

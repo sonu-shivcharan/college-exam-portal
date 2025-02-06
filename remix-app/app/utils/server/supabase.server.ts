@@ -19,3 +19,4 @@ export function getSupabase(request: Request) {
 
   return { supabase, headers };
 }
+

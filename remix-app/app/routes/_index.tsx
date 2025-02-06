@@ -1,16 +1,10 @@
-import type { MetaFunction,LoaderFunctionArgs} from "@remix-run/node";
+import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, redirect, useLoaderData } from "@remix-run/react";
 import { User } from "@supabase/supabase-js";
 import LogoutBtn from "~/components/logoutBtn";
 import { SidebarTrigger } from "~/components/ui/sidebar";
 import authService from "~/utils/server/auth.services";
-export async function loader({ request }: LoaderFunctionArgs) {
-  const {user, headers} = await authService.checkUserSession(request)
-  if (!user) {
-    return redirect("/login");
-  }
-  return Response.json(user, {headers});
-}
+
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
@@ -31,3 +25,10 @@ export default function Index() {
   );
 }
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { user, headers } = await authService.checkUserSession(request);
+  if (!user) {
+    return redirect("/login");
+  }
+  return Response.json(user, { headers });
+}
